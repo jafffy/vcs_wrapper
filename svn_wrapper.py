@@ -3,39 +3,44 @@ import vcs_wrapper
 import sqlite3
 
 class svn_wrapper(vcs_wrapper.vcs_wrapper):
-    def __init__(self):
-        pass
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.conn = sqlite3.connect('transaction.db')
 
     def init(self):
         pass
 
-    def checkout(self, url, dest, username=None, password=None):
+    def checkout(self, url, dest):
 
         url = url + '/trunk'
 
-        self.do_command('checkout', [url, dest], username, password)
+        self.do_command('checkout', [url, dest])
 
-    def add(self, targets, username=None, password=None):
-        self.do_command('add', [targets], username, password)
+    def add(self, targets):
+        self.do_command('add', [targets])
 
-    def rm(self, targets, username=None, password=None):
-        self.do_command('rm', [targets], username, password)
+    def rm(self, targets):
+        self.do_command('rm', [targets])
 
-    def commit(self, msg, username=None, password=None):
+    def commit(self, msg):
         msg = '-m \"' + msg + '\"'
-        self.do_command('commit', [msg], username, password)
+        self.do_command('commit', [msg])
         pass
 
     def push(self):
         pass
 
-    def update(self, username=None, password=None):
-        self.do_command('update', [], username, password)
+    def update(self):
+        self.do_command('update', [])
 
     def revert(self):
         pass
 
-    def do_command(self, command, parameters=[], username=None, password=None):
+    def do_command(self, command, parameters=[]):
+        username = self.username
+        password = self.password
+
         vcs = 'svn '
         vcs_command = command + ' '
 
